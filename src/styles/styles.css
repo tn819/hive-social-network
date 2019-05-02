@@ -1,0 +1,31 @@
+* {
+    font-family: sans-serif;
+}
+.app-menu {
+    display: flex;
+    height: 100px;
+    background-color: red;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+.app-menu-submenu {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    justify-content: space-between;
+    width: auto;
+    margin: 5px;
+    min-width: 300px;
+}
+
+.app-menu-submenu .profile-pic-wrapper {
+    max-width: 5em;
+}
+.profile-pic {
+    width: 100%;
+}
+.profile-pic-wrapper {
+    max-width: 15em;
+    overflow: hidden;
+}

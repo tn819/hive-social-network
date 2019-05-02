@@ -25,6 +25,10 @@ const conf = {
                 query: {
                     presets: ["@babel/preset-react", "@babel/preset-env"]
                 }
+            },
+            {
+                test: /\.s?css$/,
+                use: ["style-loader", "css-loader"]
             }
         ]
     }

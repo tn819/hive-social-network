@@ -1,0 +1,63 @@
+<!doctype html>
+<title>SPICED Academy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/onboarding.css">
+<header>
+        <a href="tabasco"><img src="/spiced.png" alt="SPICED" id="logo"></a>
+        <img src="https://avatars0.githubusercontent.com/u/12561498?v&#x3D;4" alt="Thomas Neil" class="spicedling">
+</header>
+
+<script src="/js/vue.min.js"></script>
+<main>
+    <section>
+        <h1>Get SQL to Insert Fake Users</h1>
+        <p>Here you can get SQL for creating two hundred fake users for your project. The password for all fake users will be <strong>tabasco</strong>.</p>
+        <p><strong>Confirm your table and column names:</strong></p>
+        <form method="POST" id="fake-users">
+            <div>
+                <label>Table name:</label>
+                <input name="table" value="users">
+            </div>
+            <div>
+                <label>First name column:</label>
+                <input name="first" value="first">
+            </div>
+            <div>
+                <label>Last name column:</label>
+                <input name="last" value="last">
+            </div>
+            <div>
+                <label>Email column:</label>
+                <input name="email" value="email">
+            </div>
+            <div>
+                <label>Password column:</label>
+                <input name="password" value="password">
+            </div>
+            <div v-if="!exclude.image">
+                <label>Image column:</label>
+                <input name="image" value="image">
+            </div>
+            <div>
+                <label>
+                    <input v-model="exclude.image" type="checkbox" name="exclude" value="image">
+                    Remove image column
+                </label>
+            </div>
+            <div v-if="!exclude.bio">
+                <label>Bio column:</label>
+                <input name="bio" value="bio">
+            </div>
+            <div>
+                <label>
+                    <input v-model="exclude.bio" type="checkbox" name="exclude" value="bio">
+                    Remove bio column
+                </label>
+            </div>
+            <button class="action-button">Submit</button>
+            <input type="hidden" name="_csrf" value="61CI77Pu-ZgnJlW2bjimpZoTbtb58Xd8-gV8">
+        </form>
+    </section>
+</main>
+<script src="/js/fake-users.js"></script>
+

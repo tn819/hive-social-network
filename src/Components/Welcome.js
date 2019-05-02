@@ -1,13 +1,21 @@
 import React from "react";
-import Registration from "./Registration";
+import { Link, HashRouter, Route } from "react-router-dom";
+import Registration from "./registration";
+import Login from "./login";
 
 export default class Welcome extends React.Component {
     render() {
         return (
             <div>
                 <h1>HiveLearn</h1>
-                <img src="../public/hive.jpg" />
-                <Registration />
+                <HashRouter>
+                    <div>
+                        <Route exact path="/" component={Registration} />
+                        <Route path="/login" component={Login} />
+                        <Link to="/login">Click here to Log in!</Link>
+                    </div>
+                </HashRouter>
+                <img src="/hive.jpg" />
             </div>
         );
     }

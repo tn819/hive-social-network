@@ -7,15 +7,13 @@ const dotenv = require("dotenv");
 const favicon = require("express-favicon");
 dotenv.config();
 
-const compression = require("compression");
-
-app.use(compression());
-app.use(require("body-parser").urlencoded({ extended: false }));
-app.use(favicon(path.join(__dirname + "/../public/favicon.ico")));
+app.use(require("body-parser").urlencoded({ extended: true }));
+app.use(require("body-parser").json());
+app.use(favicon(path.join(__dirname, "../public", "favicon.ico")));
 
 //directory work
-app.use(express.static(path.join(__dirname, "/../public")));
-app.use(express.static(path.join(__dirname, "/../utils")));
+app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, "../utils")));
 
 //headers and cookies middleware
 const csurf = require("csurf");
@@ -27,8 +25,12 @@ app.use(
     })
 );
 app.use(csurf());
+
+app.use(function(req, res, next) {
+    res.cookie("mytoken", req.csrfToken());
+    next();
+});
 app.use((req, res, next) => {
     res.set("x-frame-options", "DENY");
-    res.locals.csrfToken = req.csrfToken();
     next();
 });
