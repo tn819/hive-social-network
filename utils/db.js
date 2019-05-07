@@ -35,6 +35,44 @@ exports.updateUserBio = (id, value) => {
     return db.query(q, params);
 };
 
+exports.addFriendship = (requester, receiver) => {
+    let q =
+        "INSERT INTO friendships (requester, receiver) VALUES ($1, $2) RETURNING id, requester, receiver, accepted";
+    let params = [requester, receiver];
+    return db.query(q, params);
+};
+
+exports.getFriendship = (requester, receiver) => {
+    let q =
+        "SELECT * FROM friendships WHERE (requester = $1 AND receiver = $2) OR (requester = $2 AND receiver = $1)";
+    let params = [requester, receiver];
+    return db.query(q, params);
+};
+
+exports.getFriendships = id => {
+    let q = `SELECT users.userid, firstname, lastname, pic, bio, accepted, requester, receiver
+        FROM friendships JOIN users
+        ON (receiver = $1 AND requester = users.userid)
+        OR (requester = $1 AND receiver = users.userid)
+    `;
+    let params = [id];
+    return db.query(q, params);
+};
+
+exports.updateFriendship = (requester, receiver, accepted) => {
+    let q =
+        "UPDATE friendships SET accepted = $3 WHERE (requester = $1 AND receiver = $2) OR (requester = $2 AND receiver = $1)";
+    let params = [requester, receiver, accepted];
+    return db.query(q, params);
+};
+
+exports.deleteFriendship = (requester, receiver) => {
+    let q =
+        "DELETE * FROM friendships WHERE (requester = $1 AND receiver = $2) OR (requester = $2 AND receiver = $1)";
+    let params = [requester, receiver];
+    return db.query(q, params);
+};
+
 exports.checkPassword = (
     textEnteredInLoginForm,
     hashedPasswordFromDatabase

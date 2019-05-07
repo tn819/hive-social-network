@@ -29,3 +29,8 @@
     max-width: 15em;
     overflow: hidden;
 }
+
+.is-active {
+    font-weight: bold;
+    text-decoration: underline;
+}

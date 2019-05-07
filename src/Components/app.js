@@ -1,11 +1,12 @@
 import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, NavLink } from "react-router-dom";
 import axios from "../../utils/axios";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
 import OtherProfile from "./otherprofile";
 import BioEditor from "./bioeditor";
+import Friends from "./friends";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -23,8 +24,8 @@ export default class App extends React.Component {
             .get("/user")
             .then(({ data }) => {
                 console.log("initial user get for app page", data);
-                this.setState({
-                    userid: data.userid,
+                return this.setState({
+                    userid: Number(data.userid),
                     email: data.email,
                     firstname: data.firstname,
                     lastname: data.lastname,
@@ -32,6 +33,7 @@ export default class App extends React.Component {
                     pic: data.pic || "/default.jpg"
                 });
             })
+            .then()
             .catch(err => console.log(err));
     }
 
@@ -66,9 +68,13 @@ export default class App extends React.Component {
                         <h1>App</h1>
 
                         <div className="app-menu-submenu">
-                            <h3>
-                                <a href="/logout">Log Out</a>
-                            </h3>
+                            <NavLink exact to="/" activeClassName="is-active">
+                                My Profile
+                            </NavLink>
+                            <NavLink to="/friends" activeClassName="is-active">
+                                Friends
+                            </NavLink>
+                            <a href="/logout">Log Out</a>
                             <ProfilePic
                                 pic={this.state.pic}
                                 altname={`${this.state.firstname} ${
@@ -125,6 +131,7 @@ export default class App extends React.Component {
                                 />
                             )}
                         />
+                        <Route path="/friends" component={Friends} />
                     </div>
                 </div>
             </BrowserRouter>

@@ -85,7 +85,7 @@ app.post("/login", (req, res) => {
     console.log("POST login route");
     db.getUserByEmail(req.body.email)
         .then(result => {
-            console.log("initial get user", result);
+            console.log("initial get user", result.rows[0]);
 
             const { userid } = result.rows[0];
             Object.assign(req.session, {
@@ -147,7 +147,7 @@ app.get("/user", isLoggedIn, (req, res) => {
 });
 
 app.get("/api/user/:id", isLoggedIn, (req, res) => {
-    console.log("get non-logged in user route", console.log(req.params.id));
+    console.log("get non-logged in user route", req.params.id);
     db.getUserById(req.params.id)
         .then(({ rows }) => {
             if (rows[0].userid === req.session.userid) {
@@ -160,6 +160,64 @@ app.get("/api/user/:id", isLoggedIn, (req, res) => {
             res.json({ success: false });
             console.log(err);
         });
+});
+
+app.get("/friendship/:receiver", isLoggedIn, (req, res) => {
+    console.log("friend request route", req.params);
+    db.getFriendship(req.session.userid, req.params.receiver)
+        .then(({ rows }) => {
+            console.log(rows, "db response for friendship");
+            res.json(rows[0]);
+        })
+        .catch(err => console.log(err));
+});
+
+app.post("/friendship/:id", isLoggedIn, (req, res) => {
+    let { type } = req.body;
+    if (type === "accept") {
+        db.updateFriendship(req.session.userid, req.params.id, true)
+            .then(data => {
+                console.log("accept friendship", data);
+                res.json({
+                    requestAccepted: true
+                });
+            })
+            .catch(err => console.log(err));
+    } else if (type === "add") {
+        db.addFriendship(req.session.userid, req.params.id)
+            .then(data => {
+                console.log("add friendship", data);
+                res.json({
+                    requestSent: true,
+                    requestSender: true
+                });
+            })
+            .catch(err => console.log(err));
+    } else if (type === "delete") {
+        db.deleteFriendship(req.session.userid, req.params.id)
+            .then(data => {
+                console.log("delete friendship data", data);
+                res.json({
+                    requestSent: false,
+                    requestAccepted: false,
+                    requestSender: null
+                });
+            })
+            .catch(err => console.log(err));
+    }
+});
+
+app.get("/friendships", isLoggedIn, (req, res) => {
+    console.log("in friendships route");
+    db.getFriendships(req.session.userid)
+        .then(({ rows }) => {
+            console.log("gathering all friend", rows);
+            res.json({
+                id: req.session.userid,
+                friends: rows
+            });
+        })
+        .catch(err => console.log(err));
 });
 
 app.get("/welcome", (req, res) => {

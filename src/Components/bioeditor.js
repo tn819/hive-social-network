@@ -10,11 +10,18 @@ export default class BioEditor extends React.Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.postBio = this.postBio.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
     }
 
     handleChange(e) {
         this.setState({
             bio: e.target.value
+        });
+    }
+    handleBlur(e) {
+        e.preventDefault();
+        this.setState({
+            toggleBio: false
         });
     }
 
@@ -49,6 +56,7 @@ export default class BioEditor extends React.Component {
                         <textarea
                             name="bio"
                             onChange={this.handleChange}
+                            onBlur={this.handleBlur}
                             defaultValue={
                                 this.props.bio ? this.props.bio : null
                             }
@@ -57,7 +65,11 @@ export default class BioEditor extends React.Component {
                     </form>
                 )}
                 {!this.state.toggleBio && (
-                    <button onClick={() => this.setState({ toggleBio: true })}>
+                    <button
+                        onClick={() => {
+                            this.setState({ toggleBio: true });
+                        }}
+                    >
                         {this.props.bio ? "Edit Bio" : "Write Bio"}
                     </button>
                 )}
