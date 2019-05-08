@@ -29,6 +29,29 @@ export default (state = {}, action) => {
             })
         };
     }
+    if (action.type == "ONLINE_USERS") {
+        console.log("in online users action", action.onlineUsers);
+        state = {
+            ...state,
+            onlineUsers: action.onlineUsers
+        };
+    }
+
+    if (action.type == "USER_JOINED") {
+        state = {
+            ...state,
+            onlineUsers: [...state.onlineUsers, action.user]
+        };
+    }
+    if (action.type == "USER_LEFT") {
+        let socketKey = Object.keys(action.user)[0];
+        let onlineUsers = { ...state.onlineUsers };
+        delete onlineUsers[socketKey];
+        state = {
+            ...state,
+            onlineUsers: onlineUsers
+        };
+    }
 
     return state;
 };

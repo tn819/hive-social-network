@@ -3,7 +3,6 @@ import axios from "../utils/axios";
 const mapFriends = (loggedInUser, friends) => {
     const mappedFriends = friends.map(
         ({ userid, firstname, lastname, pic, bio, accepted, requester }) => {
-            console.log("friends", userid, accepted);
             return {
                 id: userid,
                 firstname,
@@ -19,12 +18,23 @@ const mapFriends = (loggedInUser, friends) => {
     return mappedFriends;
 };
 
+export async function updateFriend(id, type) {
+    console.log("update friend function", id, type);
+    return await axios
+        .post(`/friendship/${id}`, { type })
+        .then(({ data }) => {
+            console.log(data);
+            this.setState({
+                ...data
+            });
+        })
+        .catch(err => console.log(err));
+}
+
 export async function receiveFriends() {
-    console.log("in receive friends function");
     return await axios
         .get("/friendships")
         .then(({ data }) => {
-            console.log("friendships data back from axios", data);
             return {
                 type: "RECEIVE_FRIENDS",
                 friends: mapFriends(data.id, data.friends)
@@ -32,6 +42,11 @@ export async function receiveFriends() {
         })
         .catch(err => console.log("receiveFriends action error", err));
 }
+
+export const addFriend = id => ({
+    type: "ADD_FRIEND",
+    id
+});
 
 export const acceptFriend = id => ({
     type: "ACCEPT_FRIEND",
@@ -46,4 +61,19 @@ export const rejectFriend = id => ({
 export const unrequestFriend = id => ({
     type: "UNREQUEST_FRIEND",
     id
+});
+
+export const onlineUsers = onlineUsers => ({
+    type: "ONLINE_USERS",
+    onlineUsers: Object.values(onlineUsers)
+});
+
+export const userJoined = user => ({
+    type: "USER_JOINED",
+    user
+});
+
+export const userLeft = user => ({
+    type: "USER_LEFT",
+    user
 });

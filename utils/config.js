@@ -17,14 +17,9 @@ app.use(express.static(path.join(__dirname, "../utils")));
 
 //headers and cookies middleware
 const csurf = require("csurf");
-const cookieSession = require("cookie-session");
-app.use(
-    cookieSession({
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-        secret: process.env.secret
-    })
-);
+const helmet = require("helmet");
 app.use(csurf());
+app.use(helmet());
 
 app.use(function(req, res, next) {
     res.cookie("mytoken", req.csrfToken());

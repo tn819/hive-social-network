@@ -34,6 +34,7 @@
         "eslint-plugin-react": "^7.12.4",
         "express": "^4.14.0",
         "express-favicon": "^2.0.1",
+        "helmet": "^3.18.0",
         "http-proxy-middleware": "^0.19.1",
         "jest": "^24.7.1",
         "knox-s3": "^0.9.5",

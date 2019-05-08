@@ -33,8 +33,8 @@ export default class OtherProfile extends React.Component {
         return (
             <div>
                 <h1>{`${this.state.firstname} ${this.state.lastname}`}</h1>
-                <div className="profile-pic-wrapper">
-                    <div>
+                <div>
+                    <div className="profile-pic-wrapper">
                         <img
                             src={this.state.pic}
                             alt={`${this.state.firstname} ${
@@ -42,8 +42,8 @@ export default class OtherProfile extends React.Component {
                             }`}
                             className="profile-pic"
                         />
-                        <FriendButton profileid={this.state.id} />
                     </div>
+                    <FriendButton profileid={this.state.id} />
                     <p>
                         {this.state.bio
                             ? this.state.bio

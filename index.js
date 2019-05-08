@@ -1,5 +1,8 @@
 const express = require("express");
 const app = express();
+const server = require("http").Server(app);
+//include heroku app url to ensure it also works when live (white space separation)
+
 require("dotenv").config();
 const db = require("./utils/db");
 const register = require("./utils/register");
@@ -19,7 +22,6 @@ const diskStorage = multer.diskStorage({
         });
     }
 });
-
 const uploader = multer({
     storage: diskStorage,
     limits: {
@@ -41,7 +43,17 @@ if (process.env.NODE_ENV != "production") {
     );
 }
 
+const cookieSession = require("cookie-session");
+const cookieSessionMiddleware = cookieSession({
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+    secret: process.env.secret
+});
+app.use(cookieSessionMiddleware);
 app.use(require("./utils/config"));
+
+const io = require("socket.io")(server, {
+    origins: "localhost:8080 fakesocialnetwork.heroku.com:*"
+});
 
 const isLoggedIn = (req, res, next) => {
     if (req.session.userid) {
@@ -87,9 +99,21 @@ app.post("/login", (req, res) => {
         .then(result => {
             console.log("initial get user", result.rows[0]);
 
-            const { userid } = result.rows[0];
+            const {
+                userid,
+                email,
+                firstname,
+                lastname,
+                pic,
+                bio
+            } = result.rows[0];
             Object.assign(req.session, {
-                userid
+                userid,
+                email,
+                firstname,
+                lastname,
+                pic,
+                bio
             });
             console.log("initial login cookies", req.session);
             return db.checkPassword(req.body.password, result.rows[0].password);
@@ -242,6 +266,63 @@ app.get("*", (req, res) => {
     }
 });
 
-app.listen(8080, function() {
+//socket stuff
+
+let onlineUsers = {};
+
+io.use((socket, next) =>
+    cookieSessionMiddleware(socket.request, socket.request.res, next)
+);
+
+io.on("connection", socket => {
+    console.log(`socket with the id ${socket.id} is now connected`);
+    if (!socket.request.session || !socket.request.session.userid) {
+        return socket.disconnect(true);
+    }
+
+    socket.emit("onlineUsers", Object.values(onlineUsers));
+    const {
+        email,
+        firstname,
+        lastname,
+        pic,
+        bio,
+        userid: id
+    } = socket.request.session;
+    const onlineUserDetails = {
+        email,
+        firstname,
+        lastname,
+        pic,
+        bio,
+        id
+    };
+    if (
+        !Object.keys(onlineUsers).some(
+            userSocket => onlineUsers[userSocket].id === id
+        )
+    ) {
+        socket.broadcast.emit("userJoin", {
+            onlineUserDetails
+        });
+    }
+    onlineUsers[socket.id] = onlineUserDetails;
+
+    socket.on("disconnect", () => {
+        let disconnectedUser = onlineUsers[socket.id];
+        delete onlineUsers[socket.id];
+        if (
+            Object.keys(onlineUsers).some(
+                userSocket => onlineUsers[userSocket].id === id
+            )
+        ) {
+            return;
+        } else {
+            socket.emit("userLeft", { disconnectedUser });
+        }
+    });
+});
+
+server.listen(8080, function() {
     console.log("I'm listening this is NODE.");
 });

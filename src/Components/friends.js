@@ -1,4 +1,5 @@
 import React from "react";
+import FriendCard from "./friendcard";
 import { connect } from "react-redux";
 import { receiveFriends, acceptFriend, rejectFriend } from "../action";
 
@@ -22,30 +23,18 @@ class Friends extends React.Component {
             friend => !friend.requestAccepted && !friend.requestSender
         );
 
-        const FriendCard = props => (
-            <div className="friend-card-wrapper">
-                {props.friends.map(friend => (
-                    <div key={friend.id}>
-                        <div className="profile-pic-wrapper">
-                            <img src={friend.pic} />
-                        </div>
-                        <h4>{`${friend.firstname} ${friend.lastname}`}</h4>
-                    </div>
-                ))}
-            </div>
-        );
         return (
             <div>
                 <h2>Friends</h2>
                 {currentFriends && (
                     <div>
-                        <h3>Current Friends</h3>
+                        <h3>Current Friends({currentFriends.length})</h3>
                         <FriendCard friends={currentFriends} />
                     </div>
                 )}
                 {pendingFriends && (
                     <div>
-                        <h3>Friend Requests</h3>
+                        <h3>Friend Requests({pendingFriends.length})</h3>
                         <FriendCard friends={pendingFriends} />
                     </div>
                 )}

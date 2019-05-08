@@ -1,7 +1,9 @@
 import React from "react";
 import axios from "../../utils/axios";
+import { connect } from "react-redux";
+import { addFriend, acceptFriend, rejectFriend } from "../action";
 
-export default class App extends React.Component {
+class FriendButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,34 +15,47 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
-        axios
-            .get(`/friendship/${this.props.profileid}`)
-            .then(({ data }) => {
-                console.log("friend button load", data);
-                if (!data) {
-                    return;
-                } else if (data.accepted) {
-                    this.setState({
-                        requestSent: true,
-                        requestAccepted: true
-                    });
-                } else if (data.requester === this.props.profileid) {
-                    this.setState({
-                        requestSent: true,
-                        requestAccepted: false,
-                        requestSender: false
-                    });
-                } else {
-                    this.setState({
-                        requestSent: true,
-                        requestAccepted: false,
-                        requestSender: true
-                    });
-                }
-            })
-            .catch(err => {
-                console.log(err);
+        const friend = this.props.friends.filter(
+            friend => friend.id === this.props.profileid
+        )[0];
+        if (!friend) {
+            return;
+        } else {
+            this.setState({
+                requestSent: friend.requestSent,
+                requestAccepted: friend.requestAccepted,
+                requestSender: friend.requestSender
             });
+        }
+
+        // axios
+        //     .get(`/friendship/${this.props.profileid}`)
+        //     .then(({ data }) => {
+        //         console.log("friend button load", data);
+        //         if (!data) {
+        //             return;
+        //         } else if (data.accepted) {
+        //             this.setState({
+        //                 requestSent: true,
+        //                 requestAccepted: true
+        //             });
+        //         } else if (data.requester === this.props.profileid) {
+        //             this.setState({
+        //                 requestSent: true,
+        //                 requestAccepted: false,
+        //                 requestSender: false
+        //             });
+        //         } else {
+        //             this.setState({
+        //                 requestSent: true,
+        //                 requestAccepted: false,
+        //                 requestSender: true
+        //             });
+        //         }
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //     });
     }
 
     updateFriend(type) {
@@ -114,3 +129,10 @@ export default class App extends React.Component {
         );
     }
 }
+
+const mapStateToProps = state => {
+    console.log("mapStateToProps", state);
+    return { friends: state.friends };
+};
+
+export default connect(mapStateToProps)(FriendButton);

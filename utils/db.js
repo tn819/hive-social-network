@@ -11,6 +11,11 @@ exports.addUser = (firstname, lastname, email, password) => {
     return db.query(q, params);
 };
 
+exports.getUsersByIds = arrayOfIds => {
+    let q = `SELECT id, first, last, pic FROM users WHERE id = ANY($1)`;
+    return db.query(q, [arrayOfIds]);
+};
+
 exports.getUserByEmail = email => {
     let q = "SELECT * FROM users WHERE email = $1";
     let params = [email];
