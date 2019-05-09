@@ -11,8 +11,12 @@ const FriendCard = props => (
                         <img src={friend.pic} />
                     </Link>
                 </div>
-                <FriendButton profileid={friend.id} />
-                <h4>{`${friend.firstname} ${friend.lastname}`}</h4>
+                <div className="friend-card-details">
+                    <FriendButton profileid={friend.id} />
+                    <div>
+                        <h4>{`${friend.firstname} ${friend.lastname}`}</h4>
+                    </div>
+                </div>
             </div>
         ))}
     </div>

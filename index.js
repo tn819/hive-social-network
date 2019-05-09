@@ -120,7 +120,11 @@ app.post("/login", (req, res) => {
         })
         .then(result => {
             console.log("successful login", result);
-            res.json({ success: true });
+            if (result) {
+                res.json({ success: true });
+            }
+            req.session = null;
+            res.json({ success: false });
         })
         .catch(err => {
             console.log("bad login", err);
@@ -297,28 +301,42 @@ io.on("connection", socket => {
         bio,
         id
     };
-    if (
-        !Object.keys(onlineUsers).some(
-            userSocket => onlineUsers[userSocket].id === id
-        )
-    ) {
-        socket.broadcast.emit("userJoin", {
-            onlineUserDetails
-        });
+
+    if (!Object.values(onlineUsers).some(onlineUser => onlineUser.id == id)) {
+        socket.broadcast.emit("userJoined", onlineUserDetails);
     }
     onlineUsers[socket.id] = onlineUserDetails;
+
+    db.getMessages()
+        .then(({ rows }) => {
+            let formattedMessages = db.getFormattedMessages(rows);
+            socket.emit("chatHistory", formattedMessages);
+        })
+        .then(err => console.log(err));
+
+    socket.on("sendChat", chat => {
+        console.log("socket receiving chat", chat);
+        db.addMessage(id, chat)
+            .then(() => db.getMessages())
+            .then(({ rows }) => {
+                let formattedMessages = db.getFormattedMessages(rows);
+                console.log(formattedMessages, "formatted messages");
+                socket.emit("chatHistory", formattedMessages);
+            })
+            .catch(err => console.log(err));
+    });
 
     socket.on("disconnect", () => {
         let disconnectedUser = onlineUsers[socket.id];
         delete onlineUsers[socket.id];
         if (
-            Object.keys(onlineUsers).some(
-                userSocket => onlineUsers[userSocket].id === id
+            Object.values(onlineUsers).some(
+                onlineUser => onlineUser.id == disconnectedUser.id
             )
         ) {
             return;
         } else {
-            socket.emit("userLeft", { disconnectedUser });
+            socket.emit("userLeft", disconnectedUser);
         }
     });
 });

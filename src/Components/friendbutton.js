@@ -27,35 +27,6 @@ class FriendButton extends React.Component {
                 requestSender: friend.requestSender
             });
         }
-
-        // axios
-        //     .get(`/friendship/${this.props.profileid}`)
-        //     .then(({ data }) => {
-        //         console.log("friend button load", data);
-        //         if (!data) {
-        //             return;
-        //         } else if (data.accepted) {
-        //             this.setState({
-        //                 requestSent: true,
-        //                 requestAccepted: true
-        //             });
-        //         } else if (data.requester === this.props.profileid) {
-        //             this.setState({
-        //                 requestSent: true,
-        //                 requestAccepted: false,
-        //                 requestSender: false
-        //             });
-        //         } else {
-        //             this.setState({
-        //                 requestSent: true,
-        //                 requestAccepted: false,
-        //                 requestSender: true
-        //             });
-        //         }
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //     });
     }
 
     updateFriend(type) {

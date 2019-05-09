@@ -6,16 +6,18 @@ import Login from "./login";
 export default class Welcome extends React.Component {
     render() {
         return (
-            <div>
-                <h1>HiveLearn</h1>
+            <div className="content-wrapper landing">
+                <div>
+                    <h1>Hive</h1>
+                </div>
                 <HashRouter>
-                    <div>
+                    <div className="login">
                         <Route exact path="/" component={Registration} />
                         <Route path="/login" component={Login} />
-                        <Link to="/login">Click here to Log in!</Link>
+                        <Link to="/login">Log-in</Link>
+                        <Link to="/">Register</Link>
                     </div>
                 </HashRouter>
-                <img src="/hive.jpg" />
             </div>
         );
     }

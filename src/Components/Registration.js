@@ -54,40 +54,48 @@ export default class Registration extends React.Component {
                 >
                     <label>
                         First Name:
+                        <br />
                         <input
                             type="text"
                             name="firstname"
                             onChange={this.handleChange}
                             required
                         />
+                        <br />
                     </label>
                     <label>
                         Last Name:
+                        <br />
                         <input
                             type="text"
                             name="lastname"
                             onChange={this.handleChange}
                             required
                         />
+                        <br />
                     </label>
                     <label>
                         Email:
+                        <br />
                         <input
                             type="email"
                             name="email"
                             onChange={this.handleChange}
                             required
                         />
+                        <br />
                     </label>
                     <label>
                         Password (6-12 characters):
+                        <br />
                         <input
-                            type="text"
+                            type="password"
                             name="password"
                             pattern="^.{6,12}$"
                             onChange={this.handleChange}
                             required
                         />
+                        <br />
                     </label>
                     <button type="submit">Submit</button>
                     <div>{displayErrors && <p>Form is not valid</p>}</div>

@@ -8,10 +8,10 @@ export default class Profile extends React.Component {
 
     render() {
         return (
-            <div>
-                <h1>{this.props.fullname}</h1>
+            <div className="profile">
+                <h2>{this.props.fullname}</h2>
                 {this.props.profilePic}
-                {this.props.bioEditor}
+                <div className="profile-bio">{this.props.bioEditor}</div>
             </div>
         );
     }

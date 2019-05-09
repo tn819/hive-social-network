@@ -1,6 +1,7 @@
 require("dotenv").config();
 var spicedPg = require("spiced-pg");
 const bcrypt = require("bcryptjs");
+const moment = require("moment");
 
 var db = spicedPg(process.env.DATABASE_URL);
 
@@ -76,6 +77,47 @@ exports.deleteFriendship = (requester, receiver) => {
         "DELETE * FROM friendships WHERE (requester = $1 AND receiver = $2) OR (requester = $2 AND receiver = $1)";
     let params = [requester, receiver];
     return db.query(q, params);
+};
+
+exports.addMessage = (userid, comment) => {
+    let q =
+        "INSERT INTO messages (userid, comment) VALUES ($1, $2) RETURNING id, userid, comment, created_at";
+    let params = [userid, comment];
+    return db.query(q, params);
+};
+
+exports.getMessages = () => {
+    return db.query(
+        `SELECT firstname, lastname, pic, messages.id, messages.userid, comment, messages.created_at
+        FROM messages JOIN users
+        ON messages.userid = users.userid
+        WHERE messages.receiver IS NULL
+        ORDER BY messages.created_at
+        LIMIT 100`
+    );
+};
+
+exports.getFormattedMessages = messages => {
+    return messages.map(
+        ({
+            firstname,
+            lastname,
+            pic,
+            id: messageid,
+            userid: id,
+            comment,
+            created_at
+        }) => ({
+            firstname: firstname,
+            lastname: lastname,
+            pic: pic,
+            id: id,
+            messageid: messageid,
+            comment: comment,
+            created_at: created_at,
+            formatted_time: moment(created_at).format("dddd, MMMM Do YYYY")
+        })
+    );
 };
 
 exports.checkPassword = (

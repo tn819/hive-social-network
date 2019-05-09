@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS friendships;
+DROP TABLE IF EXISTS messages;
 
 CREATE TABLE users (
     userid SERIAL PRIMARY KEY,
@@ -9,7 +10,7 @@ CREATE TABLE users (
     password TEXT NOT NULL,
     pic VARCHAR(255),
     bio VARCHAR(500),
-    created_at TIMESTAMP WITH TIME ZONE
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE friendships (
@@ -17,4 +18,14 @@ CREATE TABLE friendships (
     requester SERIAL NOT NULL references users(userid) ON DELETE CASCADE,
     receiver SERIAL NOT NULL references users(userid) ON DELETE CASCADE,
     accepted BOOLEAN NOT NULL default 'false'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);
+
+CREATE TABLE messages (
+    id SERIAL PRIMARY KEY NOT NULL,
+    userid SERIAL NOT NULL references users(userid) ON DELETE CASCADE,
+    comment TEXT NOT NULL,
+    receiver INTEGER DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

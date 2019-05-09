@@ -1,4 +1,19 @@
-export default (state = {}, action) => {
+export default (
+    state = {
+        showChat: false,
+        chat: [
+            {
+                id: 0,
+                pic: null,
+                comment: "get the chat started!",
+                firstname: "test",
+                lastname: "mctester",
+                created_at: "Jan 1, 1970"
+            }
+        ]
+    },
+    action
+) => {
     if (action.type == "RECEIVE_FRIENDS") {
         console.log("in receive_friends reducer");
         state = { ...state, friends: action.friends };
@@ -30,7 +45,6 @@ export default (state = {}, action) => {
         };
     }
     if (action.type == "ONLINE_USERS") {
-        console.log("in online users action", action.onlineUsers);
         state = {
             ...state,
             onlineUsers: action.onlineUsers
@@ -38,20 +52,44 @@ export default (state = {}, action) => {
     }
 
     if (action.type == "USER_JOINED") {
-        state = {
-            ...state,
-            onlineUsers: [...state.onlineUsers, action.user]
-        };
+        if (state.onlineUsers.filter(user => user.id === action.user.id)) {
+            return { ...state };
+        } else {
+            return {
+                ...state,
+                onlineUsers: [...state.onlineUsers, action.user]
+            };
+        }
     }
     if (action.type == "USER_LEFT") {
-        let socketKey = Object.keys(action.user)[0];
-        let onlineUsers = { ...state.onlineUsers };
-        delete onlineUsers[socketKey];
         state = {
             ...state,
-            onlineUsers: onlineUsers
+            onlineUsers: state.onlineUsers.map(onlineUser => {
+                if (onlineUser.id != action.user.id) {
+                    return onlineUser;
+                }
+            })
         };
     }
 
+    if (action.type == "RECEIVE_CHAT") {
+        state = {
+            ...state,
+            chat: action.chat
+        };
+    }
+
+    if (action.type == "RECEIVE_MESSAGE") {
+        state = {
+            ...state,
+            chat: [...state.chat, action.message]
+        };
+    }
+    if (action.type == "SHOW_CHAT") {
+        state = {
+            ...state,
+            showChat: !state.showChat
+        };
+    }
     return state;
 };

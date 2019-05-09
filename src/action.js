@@ -35,9 +35,10 @@ export async function receiveFriends() {
     return await axios
         .get("/friendships")
         .then(({ data }) => {
+            let friends = mapFriends(data.id, data.friends);
             return {
                 type: "RECEIVE_FRIENDS",
-                friends: mapFriends(data.id, data.friends)
+                friends: friends
             };
         })
         .catch(err => console.log("receiveFriends action error", err));
@@ -63,17 +64,41 @@ export const unrequestFriend = id => ({
     id
 });
 
-export const onlineUsers = onlineUsers => ({
-    type: "ONLINE_USERS",
-    onlineUsers: Object.values(onlineUsers)
+export const onlineUsers = onlineUsers => {
+    let uniqueOnlineUsers = Array.from(
+        new Set(Object.values(onlineUsers).map(user => user.id))
+    ).map(id => Object.values(onlineUsers).filter(user => user.id == id)[0]);
+    return {
+        type: "ONLINE_USERS",
+        onlineUsers: uniqueOnlineUsers
+    };
+};
+
+export const userJoined = user => {
+    console.log("user joining", user);
+    return {
+        type: "USER_JOINED",
+        user
+    };
+};
+
+export const userLeft = user => {
+    console.log("user leaving", user);
+    return {
+        type: "USER_LEFT",
+        user
+    };
+};
+
+export const receiveChat = chat => ({
+    type: "RECEIVE_CHAT",
+    chat
+});
+export const receiveMessage = message => ({
+    type: "RECEIVE_MESSAGE",
+    message
 });
 
-export const userJoined = user => ({
-    type: "USER_JOINED",
-    user
-});
-
-export const userLeft = user => ({
-    type: "USER_LEFT",
-    user
+export const showChat = () => ({
+    type: "SHOW_CHAT"
 });
