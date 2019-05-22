@@ -9,6 +9,8 @@ import BioEditor from "./bioeditor";
 import Friends from "./friends";
 import FriendCard from "./friendcard";
 import Chat from "./chat";
+import UserChat from "./userchat";
+import Search from "./search";
 import { connect } from "react-redux";
 import {
     receiveFriends,
@@ -106,8 +108,12 @@ class App extends React.Component {
             <BrowserRouter>
                 <div>
                     <div className="app-menu">
-                        <h1>The Hive</h1>
+                        <div className="logo">
+                            <img src="/bee.png" />
+                        </div>
+
                         <div className="app-menu-submenu">
+                            <Search />
                             <NavLink exact to="/" activeClassName="is-active">
                                 My Profile
                             </NavLink>
@@ -164,6 +170,7 @@ class App extends React.Component {
                             }
                         />
                     )}
+
                     <div className="content-wrapper">
                         <Route
                             exact
@@ -208,21 +215,30 @@ class App extends React.Component {
                                 <FriendCard friends={this.props.onlineUsers} />
                             )}
                         />
-                        {this.props.showChat ? (
-                            <div className="chatHolder showChat">
-                                <Chat />
-                            </div>
-                        ) : (
-                            <div className="chatHolder">
-                                <div
-                                    className="chatLaunch"
-                                    onClick={this.showChat}
-                                >
-                                    <img src="/chat.png" />
-                                </div>
-                            </div>
-                        )}
                     </div>
+                    {this.props.showChat ? (
+                        <div className="chatHolder showChat">
+                            <Chat />
+                            {this.props.userChats &&
+                                this.props.userChats.map(userChat => (
+                                    <UserChat
+                                        key={userChat[0].messageid}
+                                        chat={userChat}
+                                        receiver={
+                                            userChat[0].id == this.state.userid
+                                                ? userChat[0].receiver
+                                                : userChat[0].id
+                                        }
+                                    />
+                                ))}
+                        </div>
+                    ) : (
+                        <div className="chatHolder">
+                            <div className="chatLaunch" onClick={this.showChat}>
+                                <img src="/chat.png" />
+                            </div>
+                        </div>
+                    )}
                 </div>
             </BrowserRouter>
         );
@@ -235,6 +251,7 @@ const mapStateToProps = state => {
         friends: state.friends,
         onlineUsers: state.onlineUsers,
         showChat: state.showChat,
+        userChats: state.userChats,
         chat: state.chat
     };
 };

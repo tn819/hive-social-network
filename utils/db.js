@@ -29,6 +29,12 @@ exports.getUserById = id => {
     return db.query(q, params);
 };
 
+exports.getUserByFragment = fragment => {
+    let q = `SELECT * FROM users WHERE (firstname LIKE '%' || $1 || '%') OR (lastname LIKE '%' || $1 || '%') LIMIT 5;`;
+    let params = [fragment];
+    return db.query(q, params);
+};
+
 exports.updateUserPic = (id, value) => {
     let q = "UPDATE users SET pic = $2 WHERE userid = $1 RETURNING *";
     let params = [id, value];
@@ -74,7 +80,7 @@ exports.updateFriendship = (requester, receiver, accepted) => {
 
 exports.deleteFriendship = (requester, receiver) => {
     let q =
-        "DELETE * FROM friendships WHERE (requester = $1 AND receiver = $2) OR (requester = $2 AND receiver = $1)";
+        "DELETE FROM friendships WHERE (requester = $1 AND receiver = $2) OR (requester = $2 AND receiver = $1)";
     let params = [requester, receiver];
     return db.query(q, params);
 };
@@ -97,6 +103,27 @@ exports.getMessages = () => {
     );
 };
 
+exports.addUserMessage = (userid, receiver, comment) => {
+    let q =
+        "INSERT INTO messages (userid, receiver, comment) VALUES ($1, $2, $3) RETURNING id, userid, receiver, comment, created_at";
+    let params = [userid, receiver, comment];
+    return db.query(q, params);
+};
+
+exports.getChatMessages = id => {
+    return db.query(
+        `SELECT firstname, lastname, pic, messages.id, messages.userid, messages.receiver, comment, messages.created_at
+        FROM messages JOIN users
+        ON messages.userid = users.userid
+        WHERE (messages.receiver IS NOT NULL)
+        AND(messages.receiver = $1) OR
+        (messages.userid = $1)
+        ORDER BY messages.created_at
+        LIMIT 1000`,
+        [id]
+    );
+};
+
 exports.getFormattedMessages = messages => {
     return messages.map(
         ({
@@ -105,6 +132,7 @@ exports.getFormattedMessages = messages => {
             pic,
             id: messageid,
             userid: id,
+            receiver,
             comment,
             created_at
         }) => ({
@@ -112,6 +140,7 @@ exports.getFormattedMessages = messages => {
             lastname: lastname,
             pic: pic,
             id: id,
+            receiver: receiver,
             messageid: messageid,
             comment: comment,
             created_at: created_at,

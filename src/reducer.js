@@ -85,6 +85,24 @@ export default (
             chat: [...state.chat, action.message]
         };
     }
+
+    if (action.type == "RECEIVE_USER_CHAT") {
+        state = {
+            ...state,
+            userChat: action.userChat
+        };
+    }
+    // ensure userChat id is unique
+    // if (action.type == "RECEIVE_USER_MESSAGE") {
+    //     state = {
+    //         ...state,
+    //         userChat: state.userChat.map(chat=>{
+    //             if(chat[0].receiver == userChatMessage)
+    //
+    //         })
+    //     };
+    // }
+
     if (action.type == "SHOW_CHAT") {
         state = {
             ...state,

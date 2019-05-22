@@ -2,6 +2,13 @@
     font-family: sans-serif;
     box-sizing: border-box;
 }
+:root {
+    --yellow: #f2bd1d;
+    --off-yellow: #a68729;
+    --off-white: #f2f2f2;
+    --black: #0d0d0d;
+    --gray: #404040;
+}
 a:hover,
 .profile-pic:hover,
 .chatLaunch:hover {
@@ -11,6 +18,11 @@ a:hover,
 }
 button {
     border-radius: 5px;
+    font-size: 1rem;
+    opacity: 0.8;
+    border: 3px black solid;
+    color: rgba(255, 255, 0, 0.5);
+    background-color: black;
 }
 h1 {
     color: rgba(255, 255, 0, 0.7);
@@ -31,7 +43,45 @@ p {
     border-radius: 5px;
     margin: 3px;
 }
+/*react modal handling*/
+.ReactModalPortal > div {
+    opacity: 0;
+}
+.ReactModalPortal .ReactModal__Overlay {
+    transition: opacity 200ms ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ReactModalPortal .ReactModal__Overlay--after-open {
+    opacity: 1;
+}
+.ReactModalPortal .ReactModal__Overlay--before-close {
+    opacity: 0;
+}
+.modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: rgba(255, 255, 255, 1);
+    align-items: flex-start;
+    border-radius: 5px;
+    border: 5px black solid;
+    padding: 5px;
+}
+.modal form {
+    padding: 10px;
+}
 /*top menu and layout styling*/
+.logo {
+    height: 5em;
+    width: 5em;
+    display: flex;
+}
+.logo img {
+    max-width: 100%;
+    height: auto;
+}
 .app-menu {
     display: flex;
     flex-wrap: wrap;
@@ -43,7 +93,9 @@ p {
     border-bottom: 5px solid rgba(255, 255, 0, 0.7);
 }
 .content-wrapper {
-    background: url(/hive.jpg);
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url(/hive.jpg);
+    background-size: cover;
     height: 100vh;
     overflow: scroll;
     padding: 10px;
@@ -52,12 +104,12 @@ p {
     align-items: flex-start;
     padding-bottom: 60px;
 }
+
 .app-menu-submenu {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    max-width: 70%;
     flex-grow: 1;
     padding: 5px;
     height: 80px;
@@ -126,6 +178,15 @@ p {
     flex-direction: column-reverse;
     align-items: center;
 }
+.userChatPopUp {
+    position: fixed;
+    width: 250px;
+    bottom: 0;
+    right: 250px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
 .chatEntry {
     height: 60px;
     padding: 0;
@@ -166,9 +227,10 @@ p {
     right: 0;
     bottom: 0;
     height: 60px;
-    z-index: 100;
+    z-index: 1;
     display: flex;
     flex-direction: row-reverse;
+    overflow-x: scroll;
     padding: 5px;
     border-top: 3px solid black;
     background-color: rgba(255, 255, 255, 0.6);
@@ -260,6 +322,7 @@ p {
 }
 .friend-card-wrapper {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     padding: 5px;
     justify-content: flex-start;

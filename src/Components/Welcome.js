@@ -18,6 +18,9 @@ export default class Welcome extends React.Component {
                         <Link to="/">Register</Link>
                     </div>
                 </HashRouter>
+                <div className="logo">
+                    <img src="/bee.png" />
+                </div>
             </div>
         );
     }

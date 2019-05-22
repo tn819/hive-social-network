@@ -94,9 +94,22 @@ export const receiveChat = chat => ({
     type: "RECEIVE_CHAT",
     chat
 });
+
 export const receiveMessage = message => ({
     type: "RECEIVE_MESSAGE",
     message
+});
+
+export const receiveUserChat = userChat => {
+    return {
+        type: "RECEIVE_USER_CHAT",
+        userChat: userChat
+    };
+};
+
+export const receiveUserMessage = userChatMessage => ({
+    type: "RECEIVE_USER_MESSAGE",
+    userChatMessage
 });
 
 export const showChat = () => ({
