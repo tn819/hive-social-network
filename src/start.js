@@ -1,13 +1,39 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-ReactDOM.render(
-    <HelloWorld />,
-    document.querySelector('main')
+//components
+import Welcome from "./components/welcome";
+import App from "./components/app";
+
+//styling
+import "normalize.css";
+import "./styles/styles.css";
+
+//redux, socket
+import { createStore, applyMiddleware } from "redux";
+import reduxPromise from "redux-promise";
+import reducer from "./reducer";
+import { Provider } from "react-redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import { init } from "./socket";
+
+let elem;
+const store = createStore(
+    reducer,
+    composeWithDevTools(applyMiddleware(reduxPromise))
 );
+console.log("getting store state", store.getState());
 
-function HelloWorld() {
-    return (
-        <div>Hello, World!</div>
+//consider before Mount here
+if (location.pathname == "/welcome") {
+    elem = <Welcome />;
+} else {
+    elem = (
+        <Provider store={store}>
+            <App />
+        </Provider>
     );
+    init(store);
 }
+
+ReactDOM.render(elem, document.querySelector("main"));

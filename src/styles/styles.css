@@ -1,0 +1,384 @@
+* {
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+:root {
+    --yellow: #f2bd1d;
+    --off-yellow: #a68729;
+    --off-white: #f2f2f2;
+    --black: #0d0d0d;
+    --gray: #404040;
+}
+a:hover,
+.profile-pic:hover,
+.chatLaunch:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.15s ease-in;
+}
+button {
+    border-radius: 5px;
+    font-size: 1rem;
+    opacity: 0.8;
+    border: 3px black solid;
+    color: rgba(255, 255, 0, 0.5);
+    background-color: black;
+}
+h1 {
+    color: rgba(255, 255, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding: 5px;
+    margin: 0 auto;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 3px;
+    border-radius: 5px;
+    margin: 3px;
+}
+/*react modal handling*/
+.ReactModalPortal > div {
+    opacity: 0;
+}
+.ReactModalPortal .ReactModal__Overlay {
+    transition: opacity 200ms ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ReactModalPortal .ReactModal__Overlay--after-open {
+    opacity: 1;
+}
+.ReactModalPortal .ReactModal__Overlay--before-close {
+    opacity: 0;
+}
+.modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: rgba(255, 255, 255, 1);
+    align-items: flex-start;
+    border-radius: 5px;
+    border: 5px black solid;
+    padding: 5px;
+}
+.modal form {
+    padding: 10px;
+}
+/*top menu and layout styling*/
+.logo {
+    height: 5em;
+    width: 5em;
+    display: flex;
+}
+.logo img {
+    max-width: 100%;
+    height: auto;
+}
+.app-menu {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 80px;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    border-bottom: 5px solid rgba(255, 255, 0, 0.7);
+}
+.content-wrapper {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url(/hive.jpg);
+    background-size: cover;
+    height: 100vh;
+    overflow: scroll;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-bottom: 60px;
+}
+
+.app-menu-submenu {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    padding: 5px;
+    height: 80px;
+    margin-top: 5px;
+    color: rgba(255, 255, 0, 0.5);
+}
+@media screen and (max-width: 500px) {
+    .app-menu-submenu {
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+    }
+    .app-menu-submenu a {
+        padding: 3px;
+    }
+    .app-menu {
+        flex-direction: column;
+        align-items: center;
+    }
+    .app-menu h1 {
+        margin: 0 auto;
+    }
+}
+.app-menu-submenu a {
+    color: rgba(255, 255, 0, 0.5);
+}
+.app-menu-submenu .profile-pic-wrapper {
+    max-width: 5em;
+    max-height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 40px;
+}
+.is-active {
+    font-weight: bold;
+    text-decoration: underline;
+    transform: scale(1.1);
+}
+
+/*login*/
+.content-wrapper.landing {
+    flex-direction: column;
+    align-items: center;
+}
+.login {
+    width: 15em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: rgba(255, 255, 255, 0.6);
+    align-items: flex-start;
+    border-radius: 5px;
+    border: 5px black solid;
+    padding: 5px;
+}
+
+/*chat*/
+.chatPopUp {
+    position: fixed;
+    width: 250px;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+.userChatPopUp {
+    position: fixed;
+    width: 250px;
+    bottom: 0;
+    right: 250px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+.chatEntry {
+    height: 60px;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.chatEntry form {
+    flex-grow: 1;
+}
+.chatEntry input {
+    border-radius: 5px;
+    width: 100%;
+    height: 50px;
+    max-width: 250px;
+    margin: 0 auto;
+}
+.chatEntry img {
+    width: 25px;
+    height: 25px;
+}
+.chatDisplay {
+    height: 400px;
+    width: 100%;
+    padding: 3px;
+    scroll-behavior: auto;
+    overflow-y: scroll;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-top: 3px black solid;
+    border-left: 3px black solid;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+.chatHolder {
+    position: fixed;
+    width: 100%;
+    right: 0;
+    bottom: 0;
+    height: 60px;
+    z-index: 1;
+    display: flex;
+    flex-direction: row-reverse;
+    overflow-x: scroll;
+    padding: 5px;
+    border-top: 3px solid black;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+.chatHolder.showChat {
+}
+.chatHolder img {
+    max-height: 100%;
+}
+.chatLaunch {
+    display: block;
+    border: 3px 0 0 3px;
+}
+.chatLaunch:hover {
+    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+@keyframes shake {
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+/*chat modal*/
+.chatLine {
+    display: grid;
+    min-height: 0;
+    min-width: 0;
+}
+.chatComment {
+    border-radius: 5px;
+    background-color: white;
+    padding: 3px;
+}
+.chatComment.yours {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+.chatPic {
+    display: flex;
+    width: 100%;
+    height: 4em;
+    padding: 3px;
+    justify-content: flex-end;
+}
+.chatPic-wrapper {
+    height: 100%;
+    display: flex;
+}
+
+.chatPic img {
+    object-fit: scale-down;
+    border-radius: 8px;
+}
+/*friend card styling*/
+.friend-card {
+    width: 10em;
+    height: 18em;
+    border: 5px solid black;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 5px;
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0.6);
+    overflow: hidden;
+}
+.friend-card:hover {
+    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.9);
+}
+.friend-card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding: 5px;
+    justify-content: flex-start;
+    align-items: center;
+}
+.friend-card .profile-pic-wrapper {
+    height: 10em;
+}
+.friend-card-details {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    padding: 5px;
+}
+/*profile pic, bio, card styling*/
+.profile-pic {
+    flex-shrink: 0;
+    height: 90%;
+    overflow: hidden;
+    width: 100%;
+}
+.profile-pic-wrapper {
+    width: 10em;
+    min-height: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.profile {
+    max-width: 15rem;
+    border: 3px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+.profile-bio {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+}
+.profile-bio > div,
+.profile-bio form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.profile-bio textarea {
+    flex-grow: 1;
+    min-height: 10em;
+}
