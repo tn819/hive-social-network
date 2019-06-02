@@ -26,6 +26,8 @@ file upload with multer, update coordinates and information
 verified log-in and validation
 ![alt text](https://raw.githubusercontent.com/tn819/hive-social-network/master/public/sign-in.png)
 
+## build steps
+
 ```
 npm install
 
