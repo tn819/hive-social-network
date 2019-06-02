@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
-//include heroku app url to ensure it also works when live (white space separation)
 
 require("dotenv").config();
 const db = require("./utils/db");
@@ -28,8 +27,9 @@ const cookieSessionMiddleware = cookieSession({
 app.use(cookieSessionMiddleware);
 app.use(require("./utils/config"));
 app.use(require("./routes"));
-//socket stuff
 
+//socket stuff
+//include heroku app url to ensure it also works when live (white space separation)
 const io = require("socket.io")(server, {
     origins: "localhost:8080 fakesocialnetwork.heroku.com:*"
 });

@@ -63,7 +63,7 @@ class FriendButton extends React.Component {
                                     this.updateFriend("delete");
                                 }}
                             >
-                                Pending, Undo Request?
+                                Pending, Undo?
                             </button>
                         </div>
                     ) : (
@@ -74,7 +74,7 @@ class FriendButton extends React.Component {
                                     this.updateFriend("accept");
                                 }}
                             >
-                                Accept Request
+                                Accept
                             </button>
                             <button
                                 onClick={e => {
@@ -82,7 +82,7 @@ class FriendButton extends React.Component {
                                     this.updateFriend("delete");
                                 }}
                             >
-                                Decline Request
+                                Decline
                             </button>
                         </div>
                     )
