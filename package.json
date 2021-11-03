@@ -61,7 +61,7 @@
         "style-loader": "^0.23.1",
         "uglifyjs-webpack-plugin": "^2.1.2",
         "uid-safe": "^2.1.4",
-        "validator": "^10.11.0",
+        "validator": "^13.7.0",
         "webpack": "^4.29.6",
         "webpack-dev-middleware": "^1.8.4"
     },
